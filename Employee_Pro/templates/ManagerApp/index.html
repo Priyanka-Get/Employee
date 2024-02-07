@@ -1,0 +1,80 @@
+{% extends 'ManagerApp/base.html'%}
+{%load static%}
+{% block content%}
+<style>
+    .page-wrapper{
+        margin-top: 80px;
+    }
+</style>
+
+<div class="page-wrapper">
+<div class="content container-fluid">
+<div class="page-name 	mb-4">
+<h4 class="m-0"><img src="{% static 'assets/img/profile.jpg' %}" class="mr-1" alt="profile" /> Welcome Manager</h4>
+<label>Sun, 29 Nov 2019</label>
+</div>
+<div class="row mb-4">
+<div class="col-xl-6 col-sm-12 col-12">
+<div class="breadcrumb-path ">
+<ul class="breadcrumb" >
+<li class="breadcrumb-item"><a href="{% url 'index' %}"><img src="{% static 'assets/img/dash.png' %}" class="mr-3" alt="breadcrumb" />Home</a>
+</li>
+<li class="breadcrumb-item active" style="margin-top: -1px;">Dashboard</li>
+</ul>
+<h3>Admin Dashboard</h3>
+</div>
+</div>
+<div class="col-xl-6 col-sm-12 col-12">
+<div class="row">
+<div class="col-xl-6 col-sm-6 col-12">
+<a class="btn-dash" href="/ManagerApp/">Manager Dashboard</a>
+</div>
+<div class="col-xl-6 col-sm-6 col-12">
+<a class="btn-emp" href="/EmployeeApp/">Employee Dashboard</a>
+</div>
+</div>
+</div>
+</div>
+<div class="row mb-4">
+<div class="col-xl-3 col-sm-6 col-12">
+<div class="card board1 fill1 ">
+<div class="card-body">
+<div class="card_widget_header">
+<label>Employees</label>
+<h4>{{ E_count }}</h4>
+</div>
+<div class="card_widget_img">
+<img src="{% static 'assets/img/dash1.png' %}" alt="card-img" />
+</div>
+</div>
+</div>
+</div>
+<div class="col-xl-3 col-sm-6 col-12">
+<div class="card board1 fill2 ">
+<div class="card-body">
+<div class="card_widget_header">
+<label>Companies</label>
+<h4>{{ C_count }}</h4>
+</div>
+<div class="card_widget_img">
+<img src="{% static 'assets/img/dash2.png' %}" alt="card-img" />
+</div>
+</div>
+</div>
+</div>
+<div class="col-xl-3 col-sm-6 col-12">
+<div class="card board1 fill3 ">
+<div class="card-body">
+<div class="card_widget_header">
+<label>Leaves</label>
+<h4>9</h4>
+</div>
+<div class="card_widget_img">
+<img src="{% static 'assets/img/dash3.png' %}" alt="card-img" />
+</div>
+</div>
+</div>
+</div>
+
+
+{% endblock content %}

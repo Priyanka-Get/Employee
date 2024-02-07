@@ -1,0 +1,181 @@
+{%extends 'Employee_app/base.html'%}
+{%block content%}
+{%load static%}
+
+<style>
+    /* Add styles for date input */
+    input[type="date"] {
+      padding: 20px;
+      border: 0.01px solid #ccc;
+      border-radius: 5px;
+      box-sizing: border-box;
+      width: 100%; /* Adjust the width as needed */
+    }
+    #top{
+        background-color:  rgb(26, 23, 59);
+        color: white;
+        margin-top: -15px;
+
+     
+    }
+    #top ul li{
+        color: white;
+        margin-top: -5px;
+    }
+    #top a{
+        color: white;
+        
+    }
+    #top h3{
+        color: white;
+    }
+    #submit_action{
+        padding: 10px;
+    }
+    .card .card-header {
+    padding: 0px 0px 0px;
+}
+.page-wrapper > .content {
+  margin-top: 100px;
+}
+#submit_action{
+    width: 150px;
+}
+  </style>
+<form id="employeeForm">
+   
+
+<div class="page-wrapper">
+<div class="content container-fluid">
+<div class="row">
+
+<div class="col-xl-12 col-sm-12 col-12 ">
+<div class="card">
+<div class="card-header">
+<div class="col-xl-12 col-sm-12 col-12 " id="topper">
+    <div class="breadcrumb-path mb-4" id="top">
+    <ul class="breadcrumb">
+    <li class="breadcrumb-item"><a href="index.html">Home</a>
+    </li>
+    <li class="breadcrumb-item active"> Employees</li>
+    </ul>
+    <h3>Edit Company</h3>
+    </div>
+    </div>
+<div class="card-body">
+<div class="row">
+<div class="col-xl-6 col-sm-12 col-12 ">
+<div class="form-group">
+	<label>Comapany Name :</label> <input type="text" placeholder="Comapany Name" name="cName" id="cName" value="{{elist.0.cName}}" />
+	<input type="hidden" placeholder="comp_id" name="comp_id" id="comp_id" value="{{elist.0.comp_id}}"/>
+
+</div>
+</div>
+<div class="col-xl-6 col-sm-12 col-12 ">
+<div class="form-group">
+	<label>Email Address :</label><input type="text" placeholder="Email Address" name="cEmail" id="cEmail" value="{{elist.0.cEmail}}" />
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-xl-6 col-sm-12 col-12 ">
+<div class="form-group">
+	<label>Address :</label><input type="text" placeholder="Address" name="cAddress" id="cAddress" value="{{elist.0.cAddress}}" />
+</div>
+</div>
+<div class="col-xl-6 col-sm-12 col-12 ">
+<div class="form-group">
+	<label>Company URL :</label><input type="text" placeholder="Company URL" name="cUrl"  id="cUrl" value="{{elist.0.cUrl}}"/>
+</div>
+</div>
+</div>
+<div class="row">
+	<div class="col-xl-6 col-sm-12 col-12 ">
+	<div class="form-group">
+		<label>Phone Number :</label><input type="text" placeholder="Phone Number" name="cPhno" id="cPhno" value="{{elist.0.cPhno}}" />
+	</div>
+	</div>
+	<div class="col-xl-6 col-sm-12 col-12 ">
+	<div class="form-group">
+
+	</div>
+	</div>
+	</div>
+    
+        <div class="row">
+            <div class="col-xl-6 col-sm-12 col-12 ">
+            <div class="form-group">
+                <input type="submit" id="submit_action" class="btn btn-primary" value="Submit">
+
+            </div>
+            </div>
+            <div class="col-xl-6 col-sm-12 col-12 ">
+            <div class="form-group">
+            
+            </div>
+            </div>
+            </div>
+   
+
+</div>
+</div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+      
+<script>
+
+
+
+
+  $(document).ready(function(){
+    $("#submit_action").click(function(event){
+     
+      event.preventDefault();
+        
+      comp_id = document.getElementById('comp_id').value; 
+      cName=document.getElementById('cName').value;
+      cEmail=document.getElementById('cEmail').value;
+      cAddress=document.getElementById('cAddress').value;
+      cUrl=document.getElementById('cUrl').value;    
+       
+      cPhno=document.getElementById('cPhno').value;   
+          
+		
+
+      if(confirm("Are you sure you want to save this Company?"))     
+      {
+        $.ajax({
+            url: "/Employee_app/E_updateCompany",
+            type: "POST",
+            data: { 
+                 'comp_id':comp_id,
+                 'cName': cName,
+                 'cEmail': cEmail, 
+                 'cAddress':cAddress,
+                 'cUrl':cUrl,
+                
+                 'cPhno':cPhno, 
+			},
+            success: function (result)
+             {
+              console.log("result val: ", result);
+                if (result['success']) {
+                    alert("Company details edited successfully");
+                    window.location.href = "/Employee_app/E_comp_list";
+                } else {
+                    alert("Failed to edit company details: " + result['message']);
+                }
+            },
+            error: function (xhr, status, error) {
+                console.log('AJAX error:', error);
+            }
+        });
+
+      }
+
+      });
+  });
+</script>
+
+
+{% endblock content %}

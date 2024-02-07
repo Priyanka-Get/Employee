@@ -1,0 +1,190 @@
+{%extends 'Employee_app/base.html'%}
+{%block content%}
+{%load static%}
+
+
+<style>
+    /* Add styles for date input */
+    input[type="date"] {
+      padding: 20px;
+      border: 0.01px solid #ccc;
+      border-radius: 5px;
+      box-sizing: border-box;
+      width: 100%; /* Adjust the width as needed */
+    }
+    #top{
+        background-color:  rgb(26, 23, 59);
+        color: white;
+        margin-top: -15px;
+
+     
+    }
+    #top ul li{
+        color: white;
+        margin-top: -5px;
+    }
+    #top a{
+        color: white;
+        
+    }
+    #top h3{
+        color: white;
+    }
+    #submit_action{
+        padding: 10px;
+    }
+    .card .card-header {
+    padding: 0px 0px 0px;
+}
+.page-wrapper > .content {
+  margin-top: 100px;
+}
+#submit_action{
+    width: 150px;
+}
+  </style>
+<form id="employeeForm">
+   
+
+<div class="page-wrapper">
+<div class="content container-fluid">
+<div class="row">
+
+<div class="col-xl-12 col-sm-12 col-12 ">
+<div class="card">
+<div class="card-header">
+<div class="col-xl-12 col-sm-12 col-12 " id="topper">
+    <div class="breadcrumb-path mb-4" id="top">
+    <ul class="breadcrumb">
+    <li class="breadcrumb-item"><a href="index.html">Home</a>
+    </li>
+    <li class="breadcrumb-item active"> Employees</li>
+    </ul>
+    <h3>Edit Employee Education</h3>
+    </div>
+    </div>
+    <div class="card-body">
+    <div class="row">
+    <div class="col-xl-6 col-sm-12 col-12 ">
+    <div class="form-group">
+        <select class="field__input" id="emp_id" name="employee">
+            <option value="" selected disabled id="field">Select Employee</option>
+            {% for obj in plist %}
+                <option value="{{ obj.emp_id }}" {% if obj.emp_id == elist.0.employee.emp_id %} selected {% endif %}>{{ obj.first_name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    </div>
+    <div class="col-xl-6 col-sm-12 col-12 ">
+    <div class="form-group">
+    <input type="text" placeholder="class_name" name="class_name" id="class_name" value="{{elist.0.class_name}}" />
+    <input type="hidden" placeholder="empedu_id" name="empedu_id" id="empedu_id" value="{{elist.0.empedu_id}}" />
+
+    </div>
+    </div>
+    </div>
+    <div class="row">
+    <div class="col-xl-6 col-sm-12 col-12 ">
+    <div class="form-group">
+    <input type="text" placeholder="University" name="university" id="university" value="{{elist.0.university}}">
+    </div>
+    </div>
+    <div class="col-xl-6 col-sm-12 col-12 ">
+    <div class="form-group">
+        <input type="text" placeholder="Percentage" name="percentage" id="percentage" value="{{elist.0.percentage}}">
+    
+    </div>
+    </div>
+    </div>
+    <div class="row">
+        <div class="col-xl-6 col-sm-12 col-12 ">
+        <div class="form-group">
+            <label>Passout Year</label><input type="date" placeholder="Passout Year" name="pass_out" id="pass_out" value="{% if elist.0.pass_out %}{{elist.0.pass_out|date:'Y-m-d'}}{% endif %}"/>
+    
+        </div>
+        </div>
+        <div class="col-xl-6 col-sm-12 col-12 ">
+        <div class="form-group">
+        
+        </div>
+        </div>
+        </div>
+       
+            <div class="row">
+                <div class="col-xl-6 col-sm-12 col-12 ">
+                <div class="form-group">
+                    <input type="submit" id="submit_action" class="btn btn-primary" value="Submit">
+    
+                </div>
+                </div>
+                <div class="col-xl-6 col-sm-12 col-12 ">
+                <div class="form-group">
+                
+                </div>
+                </div>
+                </div>
+       
+    
+    </div>
+    </div>
+    </div>
+    
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+      
+<script>
+
+
+
+
+  $(document).ready(function(){
+    $("#submit_action").click(function(event){
+     
+      event.preventDefault();
+        
+      empedu_id = document.getElementById('empedu_id').value;
+      employee = document.getElementById('emp_id').value; 
+      class_name=document.getElementById('class_name').value;
+      university=document.getElementById('university').value;
+      percentage=document.getElementById('percentage').value;
+      pass_out=document.getElementById('pass_out').value;    
+     
+
+
+         
+
+      if(confirm("Are you sure you want to save this Employee?"))     
+      {
+        $.ajax({
+            url: "/Employee_app/E_updateEmployeeEducation",
+            type: "POST",
+            data: { 
+                 'empedu_id':empedu_id,
+                 'employee':employee,
+                 'class_name': class_name,
+                 'university': university, 
+                 'percentage':percentage,
+                 'pass_out':pass_out, 
+                 },
+            success: function (result)
+             {
+              console.log("result val: ", result);
+                if (result['success']) {
+                    alert("Employee details edited successfully");
+                    window.location.href = "/Employee_app/E_employee_education_list";
+                } else {
+                    alert("Failed to edit employee details: " + result['message']);
+                }
+            },
+            error: function (xhr, status, error) {
+                console.log('AJAX error:', error);
+            }
+        });
+
+      }
+
+      });
+  });
+</script>
+
+
+{% endblock content %}

@@ -1,0 +1,135 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reset Password</title>
+
+    <!-- Add the following style block to include CSS styling -->
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            width: 400px;
+        }
+
+        .logo_login {
+            background-color: rgb(26, 23, 59);
+            padding: 20px;
+            text-align: center;
+        }
+
+        .logo_login h1 {
+            color: #fff;
+            margin: 0;
+        }
+
+        .forgot_form {
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .field {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        .main_bt {
+            background-color: rgb(26, 23, 59);
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .main_bt:hover {
+            background-color: rgb(26, 23, 59);
+        }
+
+        .error-message {
+            color: red;
+            margin-top: 10px;
+        }
+
+        .success-message {
+            color: green;
+            margin-top: 10px;
+        }
+    </style>
+
+    <link rel="stylesheet" href="{% static 'path/to/your/css/file.css' %}">
+</head>
+
+<body class="inner_page login">
+    <div class="container">
+        <div class="logo_login">
+            <h1>Reset Password</h1>
+        </div>
+        <div class="forgot_form">
+            <form method="POST">
+                {% csrf_token %}
+                <div class="field">
+                    <label>Email Address</label>
+                    <input type="email" name="email" placeholder="E-mail" required/>
+                </div>
+                <div class="field">
+                    <label>New Password</label>
+                    <input type="npassword" name="npassword" placeholder="New Password" required/>
+                </div>
+                <div class="field">
+                    <label>Confirm_password</label>
+                    <input type="cpassword" name="cpassword" placeholder="Confirm_password" required/>
+                </div>
+                <div class="field">
+                    {% if error_message %}
+                    <p class="error-message">{{ error_message }}</p>
+                    {% endif %}
+                    {% if success_message %}
+                    <p class="success-message">{{ success_message }}</p>
+                    {% endif %}
+                    <button class="main_bt" id="recoverPassword">Recover Password</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="{% static 'assets/js/script.js' %}"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script>
+        // Your existing JavaScript code here
+    </script>
+</body>
+</html>

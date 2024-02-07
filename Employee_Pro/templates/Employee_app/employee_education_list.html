@@ -1,0 +1,224 @@
+{% extends 'Employee_app/base.html' %}
+{% load static %}
+{% block content %}
+<style>
+  .page {
+    margin: 20px;
+    transform: translateY(100px);
+    width: 80%;
+  }
+
+  .page-wrapper {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 50px;
+  }
+
+  .content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 130%;
+  
+  }
+
+  h2 {
+    color: #555a64;
+    margin-top: 1px;
+    font-size: 27px;
+    font-weight: 700;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+
+  th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #dee2e6;
+  }
+
+  th {
+    background-color:  rgb(26, 23, 59);
+    color: #fff;
+  }
+
+  tbody tr:hover {
+    background-color: #f5f5f5;
+  }
+  .modal-header h3{
+  text-align: center;
+ }
+ #editPlan{
+  color: white;
+ }
+
+ 
+</style>
+<div class="page">
+<div class="page-wrapper">
+  <div class="content container-fluid">
+    <center><h2 >Employee Education List</h2></center>
+        
+    <table class="table table-striped">
+      <thead id="head">
+        <tr>
+        
+          <th>Name</th>
+          <th>Class Name</th>
+          <th>University</th>
+          <th>Percentage</th>
+          <th>Pass Out Year</th>
+          <th>Action</th>
+         
+        </tr>
+      </thead>
+
+      <tbody>
+        {% for employee in object_list %}
+          <tr>
+            
+            <td>{{ employee.employee.first_name }} {{ employee.employee.last_name }}</td>
+            <td>{{ employee.class_name }}</td>
+            <td>{{ employee.university}}</td>
+            <td>{{ employee.percentage }}</td>
+            <td>{{ employee.pass_out }}</td>
+            <td>
+              <button class="btn btn-success"  onClick="editEmployeeEducation('{{employee.empedu_id}}')">Edit</button>
+              <button class="btn btn-danger" onClick="DeleteEmployee_education('{{employee.empedu_id}}')">Delete</button>
+              <button class="btn btn-warning" id="editPlan" onclick="getEmployeeEducation('{{employee.empedu_id}}')">View </button>
+              
+            </td>
+            
+           
+          </tr>
+        {% endfor %} 
+      </tbody> 
+    </table>
+  </div>
+</div>
+</div>
+
+<!-- ----------------------popup form--------------------------------- -->
+<div class="modal" tabindex="-1" role="dialog" id="myHModal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content" style="width: 600px;margin-top: 70px;">
+      <div class="modal-header" style="border-bottom: 1px solid white;"><h4>Employee Education Details</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" style="margin-top: -25px;">
+ <table class="table table-hover">
+  <tbody>
+    <tr>
+      <td style="text-align: -webkit-right;">Employee Name</td>
+      <td>
+        <input type="text" class="form-control" placeholder="" id="name" name="tleads" readonly>
+      </td>
+    </tr>
+    <tr>
+      <td style="text-align: -webkit-right;">Class Name</td>
+      <td>
+        <input type="text" class="form-control" placeholder="" id="cname" name="complt" readonly>
+      </td>
+    </tr>
+    <tr>
+      <td style="text-align: -webkit-right;">University</td>
+      <td>
+        <input type="text" class="form-control" placeholder="" id="university" name="pend" readonly>
+      </td>
+    </tr>
+    <tr>
+      <td style="text-align: -webkit-right;">Percentage</td>
+      <td>
+        <input type="text" class="form-control" placeholder="" id="percentage" name="pend" readonly>
+      </td>
+    </tr>
+    
+    <tr>
+      <td style="text-align: -webkit-right;">Pass out Year</td>
+      <td>
+        <input type="text" class="form-control" placeholder="" id="year" name="datacenterName" readonly>
+      </td>
+    </tr>
+   
+   
+    </tbody>
+  </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" style="background-color:  rgb(26, 23, 59);">Close</button>
+      </div>
+    </div>
+
+
+<!-- ----------------------popup form--------------------------------- -->
+
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<!-- ... Your existing HTML code ... -->
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+function DeleteEmployee_education(empedu_id){
+  var action = confirm("Are you sure you want to delete this Employee?");
+  if (action != false) {
+    $.ajax({
+        url: '{% url "E_DeleteEmployee_education" %}',
+        data: {
+            'empedu_id': empedu_id,
+        },
+        dataType: 'json',
+        success: function (data) {
+            if (data.deleted) {
+              alert("Employee Deleted Successfully");
+              window.location.href = "{% url 'E_employee_education_list' %}";
+              $("#userTable #i-" + empedu_id).remove();
+            }
+        }
+
+    });
+
+}
+}
+function editEmployeeEducation(empedu_id) {
+  var action = confirm("Are you sure you want to edit this Employee?");
+  if (action !== false) {
+    location.href = "/Employee_app/E_editEmployeeEducation/" + empedu_id; // Add a slash here
+  }
+};
+
+function getEmployeeEducation(empedu_id) {
+    $.ajax({
+      url: '{% url "get_emp_edu_details" %}',
+      data: {
+        'empedu_id': empedu_id,
+      },
+      dataType: 'json',
+      success: function (data) {
+       
+          // Update the input fields in the modal with the received data
+        $('#name').val(data.first_name + ' ' + data.last_name);
+        $('#cname').val(data.class_name);
+        $('#university').val(data.university);
+        $('#percentage').val(data.percentage);
+        $('#year').val(data.pass_out);
+       
+        
+        $('#myHModal').modal('show');
+       
+      }
+    });
+  }
+</script>
+
+{% endblock content %}

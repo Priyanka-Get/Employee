@@ -1,0 +1,266 @@
+{% extends 'EmployeeApp/base.html' %}
+{% load static %}
+{% block content %}
+<style>
+  .page {
+    margin: 20px;
+    transform: translateY(100px);
+  }
+
+  .page-wrapper {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+  }
+
+  .content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+
+  h2 {
+    color: #555a64;
+    margin-top: 1px;
+    font-size: 27px;
+    font-weight: 700;
+  }
+
+  table {
+    width: 50%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    
+  
+  }
+
+  th, td {
+    padding: 1px;
+    text-align: left;
+    border-bottom: 1px solid #dee2e6;
+
+  }
+
+  th {
+    background-color:  rgb(26, 23, 59);
+    color: #fff;
+  }
+
+  tbody tr:hover {
+    background-color: #f5f5f5;
+  }
+  .modal-header h3{
+  text-align: center;
+ }
+ #editPlan{
+  color: white;
+ }
+ 
+</style>
+<div class="page">
+<div class="page-wrapper">
+  <div class="content container-fluid">
+    <center><h2 >Employee Attendance List</h2></center>
+        
+    <table class="table table-striped">
+      <thead id="head">
+        <tr>
+          
+          <th>P_id</th>
+          <th>E_Name</th>
+
+          <th>P_Date</th>
+      
+           
+
+          <th>Q_produced</th>  
+          <th>Time In</th>  
+          <th>Time Out</th>  
+          <th>P_Order_Id</th>  
+          <th>Work Center</th>  
+          <th>P_Status</th> 
+          <th>Shift</th>  
+          <th>Action</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {% for p in object_list %}
+          <tr>
+           
+            <td>{{ p.product_id}}</td>
+            <td>{{ p.employee.first_name }} {{ attendance.employee.last_name }}</td>
+            <td>{{ p.production_date}}</td>
+            <td>{{ p.quantity_produced}}</td>
+            <td>{{ p.time_in}}</td>
+           
+            <td>{{ p.time_out}}</td>
+           
+            <td>{{ p.production_order_id}}</td>
+            <td>{{ p.work_center}}</td>
+            <td>{{ p.production_status }}</td>
+            <td>{{ p.shift}}</td>
+
+            <td>
+              <button class="btn btn-success" onClick="EditEmployeeProduction('{{p.production_id}}')" >Edit</button>
+              <button class="btn btn-warning" id="editPlan" onclick="getEmployeeProduction('{{p.production_id}}')">View </button>
+              <button class="btn btn-danger" onClick="DeleteEmployee('{{p.production_id}}')">Delete</button>
+               
+            </td>
+           
+          </tr>
+        {% endfor %} 
+      </tbody> 
+    </table>
+  </div>
+</div>
+</div>
+<!-- ----------------------popup form--------------------------------- -->
+<div class="modal" tabindex="-1" role="dialog" id="myHModal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content" style="width: 600px;margin-top: 70px;">
+      <div class="modal-header" style="border-bottom: 1px solid white;"><h4>Employee Production Details</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" style="margin-top: -25px;">
+ <table class="table table-hover">
+  <tbody>
+    <tr>
+      <td style="text-align: -webkit-right;">Employee Name</td>
+      <td>
+        <input type="text" class="form-control" placeholder="" id="name" name="tleads" readonly>
+      </td>
+    </tr>
+    <tr>
+      <td style="text-align: -webkit-right;">Production Date</td>
+      <td>
+        <input type="text" class="form-control" placeholder="" id="production_date" name="complt" readonly>
+      </td>
+    </tr>
+    <tr>
+      <td style="text-align: -webkit-right;">Product Id</td>
+      <td>
+        <input type="text" class="form-control" placeholder="" id="product_id" name="pend" readonly>
+      </td>
+    </tr>
+    <td style="text-align: -webkit-right;">shift</td>
+    <td>
+      <input type="text" class="form-control" placeholder="" id="shift" name="pend" readonly>
+    </td>
+  </tr>
+  <td style="text-align: -webkit-right;">Quantity Produced</td>
+  <td>
+    <input type="text" class="form-control" placeholder="" id="quantity_produced" name="pend" readonly>
+  </td>
+</tr>
+<td style="text-align: -webkit-right;">Work Center</td>
+<td>
+  <input type="text" class="form-control" placeholder="" id="work_center" name="pend" readonly>
+</td>
+</tr>
+<td style="text-align: -webkit-right;">Production_order_id</td>
+<td>
+  <input type="text" class="form-control" placeholder="" id="production_order_id" name="pend" readonly>
+</td>
+</tr>
+<td style="text-align: -webkit-right;">Time In</td>
+<td>
+  <input type="text" class="form-control" placeholder="" id="time_in" name="pend" readonly>
+</td>
+</tr>
+<td style="text-align: -webkit-right;">Time Out</td>
+<td>
+  <input type="text" class="form-control" placeholder="" id="time_out" name="pend" readonly>
+</td>
+</tr>
+<td style="text-align: -webkit-right;">Production Status</td>
+<td>
+  <input type="text" class="form-control" placeholder="" id="production_status" name="pend" readonly>
+</td>
+</tr>
+   
+    
+    
+   
+    </tbody>
+  </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" style="background-color:  rgb(26, 23, 59);">Close</button>
+      </div>
+    </div>
+
+
+<!-- ----------------------popup form--------------------------------- -->
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<!-- ... Your existing HTML code ... -->
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+function DeleteEmployee(production_id){
+  var action = confirm("Are you sure you want to delete this Production?");
+  if (action != false) {
+    $.ajax({
+        url: '{% url "Deleteproduction" %}',
+        data: {
+            'production_id': production_id,
+        },
+        dataType: 'json',
+        success: function (data) {
+            if (data.deleted) {
+              alert("Production Deleted Successfully");
+              window.location.href = "/EmployeeApp/production_list";
+              $("#userTable #i-" + production_id).remove();
+            }
+        }
+
+    });
+
+}
+}
+function EditEmployeeProduction(production_id) {
+  var action = confirm("Are you sure you want to edit this production?");
+  if (action !== false) {
+    
+    location.href = "/EmployeeApp/editEmployeeProduction/" + production_id; // Add a slash here
+  }
+};
+function getEmployeeProduction(production_id) {
+    $.ajax({
+        url: '{% url "get_emp_pro_details" %}',
+        data: {
+            'production_id': production_id,
+        },
+        dataType: 'json',
+        success: function (data) {
+            // Update the input fields in the modal with the received data
+            $('#name').val(data.first_name + ' ' + data.last_name);
+            $('#production_date').val(data.production_date);
+            $('#production_status').val(data.production_status);
+            $('#shift').val(data.shift);
+            $('#quantity_produced').val(data.quantity_produced);
+            $('#work_center').val(data.work_center);
+            $('#production_order_id').val(data.production_order_id);
+            $('#time_in').val(data.time_in);
+            $('#time_out').val(data.time_out);
+            $('#product_id').val(data.product_id);
+            $('#myHModal').modal(data.show);
+
+
+
+        }
+    });
+}
+
+
+
+</script>
+
+{% endblock content %}

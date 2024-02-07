@@ -1,0 +1,245 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    
+    <!-- Add the following style block to include CSS styling -->
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: #f4f4f4;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            width: 400px;
+    transform: translateX(-140%);
+    border-radius: 40px;
+    height: 400px;
+        }
+
+        .logo_login {
+            background-color:  rgb(26, 23, 59);
+            padding: 20px;
+            text-align: center;
+            border-radius: 50px;
+        }
+
+        .logo_login h1 {
+            color: #fff;
+            margin: 0;
+            /* font-size: 80px; */
+        }
+
+        .login_form {
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .field {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 20px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        .form-check-label {
+            display: block;
+            margin-top: 10px;
+            margin-bottom: 15px;
+            font-size: 14px;
+            transform: translateX(-40px);
+        }
+        .form-check-input{
+               transform: translateY(15px);
+               margin-left: -100px;
+        }
+
+        .forgot {
+            display: block;
+    text-align: right;
+    margin-top: 5px;
+    color:  #2F47BA;
+    text-decoration: none;
+    font-size: 12px;
+    transform: translateX(-30px);
+    margin-top: -30px;
+        }
+
+        .forgot:hover {
+            text-decoration: underline;
+        }
+
+        .main_bt {
+            background-color:rgb(26, 23, 59);
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-left: 80px;
+    transform: translateY(5px);
+    width: 80%;
+    margin-left: 50px;
+    height: 50px;
+    /* width: 95%;
+    margin-left: 10px;
+    height: 50px; */
+        }
+
+        .main_bt:hover {
+            background-color:  rgb(26, 23, 59);
+        }
+
+        .error-message {
+            color: red;
+            margin-top: 10px;
+        }
+        img{
+   width: 45%;
+   height: 80%;
+   transform: translateX(500px);
+   margin-top: -50px;
+}
+.Remember{   
+     transform: translateY(-1px);
+    margin-left: 100px;
+}
+.login_signup{
+margin-left: 130px;
+margin-top: 40px;
+}
+    </style>
+
+    <link rel="stylesheet" href="{% static 'path/to/your/css/file.css' %}">
+</head>
+
+<body class="inner_page login">
+     <img src="https://www.atsi.in/images//inner/emp-payroll.png" alt="">
+    <div class="container">
+        <div class="logo_login">
+            <h1>Login</h1>
+        </div>
+        <div class="login_form">
+            <form method="POST">
+                {% csrf_token %}
+               
+                <div class="field">
+                    <label>Email Address</label>
+                    <input type="email" name="email" placeholder="E-mail" id="email" required/>
+                </div>
+                <div class="field">
+                    <label>Password</label>
+                    <input type="password" name="password" placeholder="Password" id="password"  required/>
+                </div>
+              
+              
+              <div class="field">
+                 <label class="form-check-label">
+                     <input type="checkbox" class="form-check-input"> 
+                     <div class="Remember">Remember Me</div>
+                 </label>
+                 <a class="forgot" href="{% url 'forgot' %}">Forgotten Password?</a>
+             </div>
+               
+                <div class="field">
+                    {% if error_message %}
+                    <p class="error-message">{{ error_message }}</p>
+                    {% endif %}
+                    <button class="main_bt"id="login_action">Login</button>
+                    
+                </div>
+                <!-- <div class="login_signup">Don't have an account? <a href="{% url 'E_sign_in' %}" id="signup">Signup</a></div> -->
+           
+            </form>
+        </div>
+    </div>
+
+    <script src="{% static 'assets/js/script.js' %}"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+ 
+
+<script>
+     $(document).ready(function(){
+            $("#login_action").click(function(){
+            event.preventDefault();
+
+                var email = $('#email').val();
+                var password = $('#password').val();
+                var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+
+                
+                console.log("email :", email);
+                console.log("password: ",password);
+
+                $.ajax({
+                    url:"/E_login_check",
+                    type : "POST",
+                    data : {email : email,password : password},
+                    
+                    success : function(result)
+                    {
+                        console.log("result ***: ",result);
+                        
+                        if(result['usertype'] == 'default')
+                        {
+                            alert("Invalid Email or password does not match!!")
+                          
+                        }
+                        else if(result['usertype'] == 'manager')
+                        {
+                            alert("welcome"+ result ['userdetails']);
+                            window.location.href = "/ManagerApp";
+                          
+                        }
+                        else if(result['usertype'] == 'employee')
+                        {
+                            alert("welcome"+ result ['userdetails']);
+                            window.location.href = "/EmployeeApp";
+                          
+                        }
+                        else
+                        {
+                            alert("welcome"+ result ['userdetails']);
+                            window.location.href = "/Employee_app";
+                        }
+                    }
+                });
+            
+            });
+            
+        });
+
+  </script>
+</body>
+</html>
+
+       

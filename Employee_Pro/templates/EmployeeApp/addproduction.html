@@ -1,0 +1,237 @@
+{%extends 'EmployeeApp/base.html'%}
+{%block content%}
+{%load static%}
+
+<style>
+    /* Add styles for date input */
+    input[type="date"] {
+      padding: 20px;
+      border: 0.01px solid #ccc;
+      border-radius: 5px;
+      box-sizing: border-box;
+      width: 100%; /* Adjust the width as needed */
+    }
+    #top{
+        background-color:  rgb(26, 23, 59);
+        color: white;
+        margin-top: -15px;
+
+     
+    }
+    #top ul li{
+        color: white;
+        margin-top: -5px;
+    }
+    #top a{
+        color: white;
+        
+    }
+    #top h3{
+        color: white;
+    }
+    #submit_action{
+        padding: 10px;
+    }
+    .card .card-header {
+    padding: 0px 0px 0px;
+}
+.page-wrapper > .content {
+  margin-top: 100px;
+}
+#submit_action{
+    width: 150px;
+}
+  </style>
+
+    <form method="post" id="employeeForm" action="{% url 'add_production' %}">
+        {% csrf_token %}
+
+<div class="page-wrapper">
+<div class="content container-fluid">
+<div class="row">
+
+<div class="col-xl-12 col-sm-12 col-12 ">
+<div class="card">
+<div class="card-header">
+<div class="col-xl-12 col-sm-12 col-12 " id="topper">
+    <div class="breadcrumb-path mb-4" id="top">
+    <ul class="breadcrumb">
+    <li class="breadcrumb-item"><a href="index.html">Home</a>
+    </li>
+    <li class="breadcrumb-item active"> Employees</li>
+    </ul>
+    <h3>Create Employee Attendance</h3>
+    </div>
+    </div>
+<div class="card-body">
+
+<div class="row">
+    <div class="col-xl-6 col-sm-12 col-12 ">
+    <div class="form-group">
+        <select class="field__input" id="emp_id" name="employee">
+            <option value="" selected disabled id="field">Select Employee</option>
+            {% for employee in employee_list %}
+                <option value="{{ employee.emp_id }}">{{ employee.emp_id }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    </div>
+    <div class="col-xl-6 col-sm-12 col-12 ">
+    <div class="form-group">
+    <input type="text" placeholder="Product_id" name="product_id" id="product_id" />
+    </div>
+    </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-xl-6 col-sm-12 col-12 ">
+        <div class="form-group">
+            <input type="text" placeholder="Production_order_id" name="production_order_id" id="production_order_id" />
+
+        </div>
+        </div>
+        <div class="col-xl-6 col-sm-12 col-12 ">
+        <div class="form-group">
+        <input type="text" placeholder="work_center" name="work_center"  id="work_center"/>
+        </div>
+        </div>
+        </div>
+    <div class="row">
+        <div class="col-xl-6 col-sm-12 col-12 ">
+        <div class="form-group">
+        <input type="text" placeholder="Quantity Produced" name="quantity_produced" id="quantity_produced" />
+        </div>
+        </div>
+        <div class="col-xl-6 col-sm-12 col-12 ">
+        <div class="form-group">
+        <input type="text" placeholder="time In" name="time_in" id="time_in"/>
+        </div>
+        </div>
+        </div>
+        <div class="row">
+            <div class="col-xl-6 col-sm-12 col-12 ">
+            <div class="form-group">
+                <input type="text" placeholder="time out" name="time_out" id="time_out"/>
+
+            </div>
+            </div>
+            <div class="col-xl-6 col-sm-12 col-12 ">
+            <div class="form-group">
+                <select class="field__input" id="production_status" name="production_status">
+                    <option value="" selected disabled>Select Production Status</option>
+                    <option value="present">In Progress</option>
+                    <option value="absent">Completed</option>
+                </select>
+            </div>
+            </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-6 col-sm-12 col-12 ">
+                <div class="form-group">
+                    <input type="date" id="production_date" placeholder="production_date" name="production_date">
+        
+            
+                </div>
+                </div>
+                <div class="col-xl-6 col-sm-12 col-12 ">
+                <div class="form-group">
+                    <input type="text" id="shift" placeholder="shift" name="shift">
+                
+                </div>
+                </div>
+                </div>
+
+    <div class="row">
+        <div class="col-xl-6 col-sm-12 col-12 ">
+        <div class="form-group">
+            <input type="submit" id="submit_action" class="btn btn-primary" value="Submit">
+
+    
+        </div>
+        </div>
+        <div class="col-xl-6 col-sm-12 col-12 ">
+        <div class="form-group">
+        
+        </div>
+        </div>
+        </div>
+    
+
+</form>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  
+                
+                
+<script>
+    $(document).ready(function(){
+      $("#submit_action").click(function(){
+        event.preventDefault();	
+        var  emp_id= $('[name="employee"]').val();
+        var product_id = $('#product_id').val();
+        var production_date = $('#production_date').val();
+        var time_in = $('#time_in').val();
+        var time_out = $('#time_out').val();
+        var shift =$('#shift').val();
+        var quantity_produced=$('#quantity_produced').val();
+        var production_order_id=$('#production_order_id').val();
+        var work_center=$('#work_center').val();
+
+        var production_status = $('#production_status').val();
+        
+      
+        
+       
+        var csrf_token = $('input[name=csrfmiddlewaretoken]').val();
+
+console.log('product_id:',product_id);
+console.log('Production Date:', production_date);      
+console.log('time_in:',time_in );      
+console.log('time_out:',time_out );
+console.log('quantity_produced:',quantity_produced ); 
+console.log('work_center:',work_center ); 
+console.log('production_order_id:',production_order_id ); 
+console.log('shift:',shift ); 
+console.log('production_status:', production_status); 
+console.log('emp_id:',emp_id ); 
+
+
+        
+
+        $.ajax({
+            url: "{% url 'add_production' %}",
+            type: "POST",
+		
+            data: {
+                emp_id:emp_id,
+                product_id:product_id,
+                production_date:production_date,
+                time_in:time_in,
+                time_out:time_out,
+                shift:shift,
+                quantity_produced:quantity_produced,
+                work_center:work_center,
+                production_order_id:production_order_id,
+                production_status:production_status,
+                csrfmiddlewaretoken: csrf_token },
+                
+			success : function(result)
+                {
+                    console.log("result ***: ",result);
+                    alert("production updated successfully");
+                    window.location.href = "/EmployeeApp/production_list";
+                },
+                error: function(error) {
+                    console.log("error ***: ", error);
+                    alert("Error adding production");
+                    window.location.reload();
+                }
+        });
+    });
+});
+
+</script>
+
+
+{% endblock content %}

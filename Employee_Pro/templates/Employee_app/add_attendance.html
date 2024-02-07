@@ -1,0 +1,170 @@
+{%extends 'Employee_app/base.html'%}
+{%block content%}
+{%load static%}
+
+<style>
+    /* Add styles for date input */
+    input[type="date"] {
+      padding: 20px;
+      border: 0.01px solid #ccc;
+      border-radius: 5px;
+      box-sizing: border-box;
+      width: 100%; /* Adjust the width as needed */
+    }
+    #top{
+        background-color:  rgb(26, 23, 59);
+        color: white;
+        margin-top: -15px;
+
+     
+    }
+    #top ul li{
+        color: white;
+        margin-top: -5px;
+    }
+    #top a{
+        color: white;
+        
+    }
+    #top h3{
+        color: white;
+    }
+    #submit_action{
+        padding: 10px;
+    }
+    .card .card-header {
+    padding: 0px 0px 0px;
+}
+.page-wrapper > .content {
+  margin-top: 50px;
+}
+#submit_action{
+    width: 150px;
+}
+.container, .container-fluid, .container-lg, .container-md, .container-sm, .container-xl {
+    width: 80%;
+}
+  </style>
+<form id="employeeForm">
+   
+
+<div class="page-wrapper">
+<div class="content container-fluid">
+<div class="row">
+
+<div class="col-xl-12 col-sm-12 col-12 ">
+<div class="card">
+<div class="card-header">
+<div class="col-xl-12 col-sm-12 col-12 " id="topper">
+    <div class="breadcrumb-path mb-4" id="top">
+    <ul class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a>
+    </li>
+    <li class="breadcrumb-item active"> Employees</li>
+    </ul>
+    <h3>Create Employee Attendance</h3>
+    </div>
+    </div>
+<div class="card-body">
+<div class="row">
+<div class="col-xl-6 col-sm-12 col-12 ">
+<div class="form-group">
+    <select class="field__input" id="emp_id" name="employee">
+        <option value="" selected disabled id="field">Select Employee</option>
+        {% for employee in employee_list %}
+            <option value="{{ employee.emp_id }}">{{ employee.emp_id }}</option>
+        {% endfor %}
+    </select>
+    
+</div>
+</div>
+
+<div class="col-xl-6 col-sm-12 col-12 ">
+<div class="form-group">
+    
+
+</div>
+</div>
+</div>
+<div class="row">
+	<div class="col-xl-6 col-sm-12 col-12 ">
+	<div class="form-group">
+        <select class="field__input" id="status" name="status">
+            <option value="" selected disabled>Select Status</option>
+            <option value="present">Present</option>
+            <option value="absent">Absent</option>
+        </select>
+
+	</div>
+	</div>
+	<div class="col-xl-6 col-sm-12 col-12 ">
+	<div class="form-group">
+	
+	</div>
+	</div>
+	</div>
+    <div class="row">
+        <div class="col-xl-6 col-sm-12 col-12 ">
+        <div class="form-group">
+            <input type="submit" id="submit_action" class="btn btn-primary" value="Submit">
+
+    
+        </div>
+        </div>
+        <div class="col-xl-6 col-sm-12 col-12 ">
+        <div class="form-group">
+        
+        </div>
+        </div>
+        </div>
+    
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  
+                
+                
+<script>
+    $(document).ready(function(){
+      $("#submit_action").click(function(){
+        event.preventDefault();	
+        var  emp_id= $('[name="employee"]').val();
+        
+      
+        var status = $('#status').val();
+       
+        var csrf_token = $('input[name=csrfmiddlewaretoken]').val();
+
+
+        
+        
+
+        $.ajax({
+            url: "/Employee_app/E_add_attendance",
+            type: "POST",
+		
+            data: {
+                emp_id:emp_id,
+             
+                status:status,
+                csrfmiddlewaretoken: csrf_token }, // Corrected key names
+			success : function(result)
+                {
+                    console.log("result ***: ",result);
+                    alert("Attendance updated successfully");
+                    window.location.href = "/Employee_app/E_attendance_list";
+                },
+                error: function(error) {
+                    console.log("error ***: ", error);
+                    alert("Error adding attendance");
+                    window.location.reload();
+                }
+        });
+    });
+});
+
+</script>
+
+
+{% endblock content %}

@@ -1,0 +1,250 @@
+{% extends 'ManagerApp/base.html' %}
+{% load static %}
+{% block content %}
+<style>
+  .page {
+    margin: 20px;
+    transform: translateY(100px);
+    width: 100%;
+    margin-left: -8px;
+    
+  }
+
+  .page-wrapper {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 100px;
+   
+  }
+
+  .content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+ 
+
+  h2 {
+    color: #555a64;
+    margin-top: 1px;
+    font-size: 27px;
+    font-weight: 700;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    transform: translateX(-10px)
+  }
+
+  th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #dee2e6;
+  }
+
+  th {
+    background-color:  rgb(26, 23, 59);
+    color: #fff;
+  }
+
+  tbody tr:hover {
+    background-color: #f5f5f5;
+  }
+ .modal-header h3{
+  text-align: center;
+ }
+ #editPlan{
+  color: white;
+ }
+
+ 
+</style>
+<div class="page" id="pageid">
+<div class="page-wrapper">
+  <div class="content container-fluid" id="content">
+    <center><h2 >Employee Personal List</h2></center>
+        
+    <table class="table table-striped">
+      <thead id="head">
+        <tr>
+          
+          <th>FName</th>
+          <th>LName</th>
+          <th>DOB</th>
+          <th>Address</th>
+          <th>Contact</th>
+          <th>Email</th>
+          <th>Adhar_no</th>
+          <th>Pan_no</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {% for employee in object_list %}
+          <tr>
+           
+            <td>{{ employee.first_name }}</td>
+            <td>{{ employee.last_name }}</td>
+            <td>{{ employee.dob }}</td>
+            <td>{{ employee.address }}</td>
+            <td>{{ employee.phno }}</td>
+            <td>{{ employee.email }}</td>
+            <td>{{ employee.adhar_no }}</td>
+            <td>{{ employee.pan_no }}</td>
+            <td>
+              <button class="btn btn-success"  onClick="EditEmployee('{{employee.emp_id}}')">Edit</button>
+              <button class="btn btn-danger" onClick="DeleteEmployee('{{employee.emp_id}}')">Delete</button>
+              <button class="btn btn-warning" id="editPlan" onclick="getEmployee('{{employee.emp_id}}')">View </button>
+             
+
+            </td>
+           
+          </tr>
+        {% endfor %} 
+      </tbody> 
+    </table>
+  </div>
+</div>
+</div>
+
+
+
+
+
+<!-- ----------------------popup form--------------------------------- -->
+<div class="modal" tabindex="-1" role="dialog" id="myHModal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content" style="width: 600px;margin-top: 70px;">
+      <div class="modal-header" style="border-bottom: 1px solid white;"><h4>Employee Details</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" style="margin-top: -25px;">
+ <table class="table table-hover">
+  <tbody>
+    <tr>
+      <td style="text-align: -webkit-right;">Employee Name</td>
+      <td>
+        <input type="text" class="form-control" placeholder="" id="name" name="tleads" readonly>
+      </td>
+    </tr>
+    <tr>
+      <td style="text-align: -webkit-right;">Date Of Birth</td>
+      <td>
+        <input type="text" class="form-control" placeholder="" id="dob" name="complt" readonly>
+      </td>
+    </tr>
+    <tr>
+      <td style="text-align: -webkit-right;">Address</td>
+      <td>
+        <input type="text" class="form-control" placeholder="" id="address" name="pend" readonly>
+      </td>
+    </tr>
+    <tr>
+      <td style="text-align: -webkit-right;">Contact Number</td>
+      <td>
+        <input type="text" class="form-control" placeholder="" id="phno" name="pend" readonly>
+      </td>
+    </tr>
+    
+    <tr>
+      <td style="text-align: -webkit-right;">Email Address</td>
+      <td>
+        <input type="text" class="form-control" placeholder="" id="email" name="datacenterName" readonly>
+      </td>
+    </tr>
+    <tr>
+      <td style="text-align: -webkit-right;">Adhar Number</td>
+      <td>
+        <input type="text" class="form-control" placeholder="" id="adhar_no" name="cpn" readonly>
+      </td>
+    </tr>
+    <tr>
+      <td style="text-align: -webkit-right;">Pan Number</td>
+      <td>
+        <input type="text" class="form-control" placeholder="" id="pan_no" name="vaddr" readonly>
+      </td>
+    </tr>
+   
+    </tbody>
+  </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" style="background-color:  rgb(26, 23, 59);">Close</button>
+      </div>
+    </div>
+
+
+<!-- ----------------------popup form--------------------------------- -->
+
+
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<!-- ... Your existing HTML code ... -->
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+function DeleteEmployee(emp_id){
+  var action = confirm("Are you sure you want to delete this Employee?");
+  if (action != false) {
+    $.ajax({
+        url: '{% url "DeleteEmployee" %}',
+        data: {
+            'emp_id': emp_id,
+        },
+        dataType: 'json',
+        success: function (data) {
+            if (data.deleted) {
+              alert("Employee Deleted Successfully");
+              window.location.href = "/ManagerApp/employee_list";
+              $("#userTable #i-" + emp_id).remove();
+            }
+        }
+
+    });
+
+}
+}
+function EditEmployee(emp_id) {
+  var action = confirm("Are you sure you want to edit this Employee?");
+  if (action !== false) {
+    location.href = "/ManagerApp/editEmployee/"+ emp_id; // Add a slash here
+  }
+};
+
+
+  function getEmployee(emp_id) {
+    $.ajax({
+      url: '{% url "get_employee_details" %}',
+      data: {
+        'emp_id': emp_id,
+      },
+      dataType: 'json',
+      success: function (data) {
+        // Update the input fields in the modal with the received data
+        $('#name').val(data.first_name + ' ' + data.last_name);
+        $('#dob').val(data.dob);
+        $('#phno').val(data.phno);
+        $('#address').val(data.address);
+        $('#email').val(data.dob);
+        $('#adhar_no').val(data.adhar_no);
+        $('#pan_no').val(data.pan_no);
+        
+        $('#myHModal').modal('show');
+      }
+    });
+  }
+
+
+</script>
+
+{% endblock content %}

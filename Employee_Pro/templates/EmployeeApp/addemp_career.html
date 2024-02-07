@@ -1,0 +1,184 @@
+{%extends 'EmployeeApp/base.html'%}
+{%block content%}
+{%load static%}
+
+<style>
+    /* Add styles for date input */
+    input[type="date"] {
+      padding: 20px;
+      border: 0.01px solid #ccc;
+      border-radius: 5px;
+      box-sizing: border-box;
+      width: 100%; /* Adjust the width as needed */
+    }
+    #top{
+        background-color:  rgb(26, 23, 59);
+        color: white;
+        margin-top: -15px;
+
+     
+    }
+    #top ul li{
+        color: white;
+        margin-top: -5px;
+    }
+    #top a{
+        color: white;
+        
+    }
+    #top h3{
+        color: white;
+    }
+    #submit_action{
+        padding: 10px;
+    }
+    .card .card-header {
+    padding: 0px 0px 0px;
+}
+.page-wrapper > .content {
+  margin-top: 100px;
+}
+#submit_action{
+    width: 150px;
+}
+  </style>
+<form id="employeeForm">
+   
+
+<div class="page-wrapper">
+<div class="content container-fluid">
+<div class="row">
+
+<div class="col-xl-12 col-sm-12 col-12 ">
+<div class="card">
+<div class="card-header">
+<div class="col-xl-12 col-sm-12 col-12 " id="topper">
+    <div class="breadcrumb-path mb-4" id="top">
+    <ul class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a>
+    </li>
+    <li class="breadcrumb-item active"> Employees</li>
+    </ul>
+    <h3>Create Employee Career</h3>
+    </div>
+    </div>
+<div class="card-body">
+<div class="row">
+<div class="col-xl-6 col-sm-12 col-12 ">
+<div class="form-group">
+    <select class="field__input" id="emp_id" name="employee">
+        <option value="" selected disabled id="field">Select Employee</option>
+        {% for employee in employee_list %}
+            <option value="{{ employee.emp_id }}">{{ employee.first_name }}</option>
+        {% endfor %}
+    </select>
+</div>
+</div>
+<div class="col-xl-6 col-sm-12 col-12 ">
+<div class="form-group">
+<input type="text" placeholder="Company Name" name="comapny_name" id="company_name" />
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-xl-6 col-sm-12 col-12 ">
+<div class="form-group">
+    <label>Start Year</label><input type="date" placeholder="Start Year" name="start_date" id="start_date" />
+</div>
+</div>
+<div class="col-xl-6 col-sm-12 col-12 ">
+<div class="form-group">
+
+    <label>End Year</label><input type="date" placeholder="End Year" name="end_date" id="end_date" />
+
+</div>
+</div>
+</div>
+<div class="row">
+	<div class="col-xl-6 col-sm-12 col-12 ">
+	<div class="form-group">
+        <input type="text" placeholder="Title" name="title" id="title">
+        
+
+	</div>
+	</div>
+	<div class="col-xl-6 col-sm-12 col-12 ">
+	<div class="form-group">
+       
+	
+	</div>
+	</div>
+	</div>
+   
+        <div class="row">
+            <div class="col-xl-6 col-sm-12 col-12 ">
+            <div class="form-group">
+                <input type="submit" id="submit_action" class="btn btn-primary" value="Submit">
+
+            </div>
+            </div>
+            <div class="col-xl-6 col-sm-12 col-12 ">
+            <div class="form-group">
+            
+            </div>
+            </div>
+            </div>
+   
+
+</div>
+</div>
+</div>
+
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  
+                
+                
+<script>
+    $(document).ready(function(){
+      $("#submit_action").click(function(){
+        event.preventDefault();	
+        var emp_id= $('[name="employee"]').val();
+        
+        var company_name = $('#company_name').val();
+     
+        var start_date = $('#start_date').val();
+        var end_date = $('#end_date').val();
+        var title = $('#title').val();
+		
+        var csrf_token = $('input[name=csrfmiddlewaretoken]').val();
+
+
+        
+       
+
+
+        $.ajax({
+            url: "{% url 'Emp_addemp_career' %}",
+            type: "POST",
+		
+            data: { emp_id:emp_id ,
+             company_name: company_name,
+             start_date:start_date,
+             end_date:end_date,
+             title:title,
+             
+             csrfmiddlewaretoken: csrf_token }, 
+			success : function(result)
+                {
+                    console.log("result ***: ",result);
+                    alert("Employee Career Details added");
+                    window.location.href = "/EmployeeApp/Emp_employee_career_list";
+                },
+                error: function(error) {
+                    console.log("error ***: ", error);
+                    alert("Error adding Employee");
+                    window.location.reload();
+                }
+        });
+    });
+});
+
+</script> 
+
+
+{% endblock content %}

@@ -1,0 +1,39 @@
+/* attendance/static/attendance/styles.css */
+body {
+    font-family: Arial, sans-serif;
+}
+
+h1 {
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
+}
+
+.attendance-table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.attendance-table th, .attendance-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.attendance-table th {
+    background-color: #f2f2f2;
+}
+
+.update-link, .back-link {
+    display: block;
+    margin-top: 20px;
+    text-decoration: none;
+    background-color: #333;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+}
+
+.update-link:hover, .back-link:hover {
+    background-color: #555;
+}

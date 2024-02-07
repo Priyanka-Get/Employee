@@ -1,0 +1,191 @@
+{%extends 'ManagerApp/base.html'%}
+{%block content%}
+{%load static%}
+
+<style>
+    /* Add styles for date input */
+    input[type="date"] {
+      padding: 20px;
+      border: 0.01px solid #ccc;
+      border-radius: 5px;
+      box-sizing: border-box;
+      width: 100%; /* Adjust the width as needed */
+    }
+    #top{
+        background-color:  rgb(26, 23, 59);
+        color: white;
+        margin-top: -15px;
+
+     
+    }
+    #top ul li{
+        color: white;
+        margin-top: -5px;
+    }
+    #top a{
+        color: white;
+        
+    }
+    #top h3{
+        color: white;
+    }
+    #submit_action{
+        padding: 10px;
+    }
+    .card .card-header {
+    padding: 0px 0px 0px;
+}
+.page-wrapper > .content {
+  margin-top: 100px;
+}
+#submit_action{
+    width: 150px;
+}
+  </style>
+<form id="employeeForm">
+   
+
+<div class="page-wrapper">
+<div class="content container-fluid">
+<div class="row">
+
+<div class="col-xl-12 col-sm-12 col-12 ">
+<div class="card">
+<div class="card-header">
+<div class="col-xl-12 col-sm-12 col-12 " id="topper">
+    <div class="breadcrumb-path mb-4" id="top">
+    <ul class="breadcrumb">
+    <li class="breadcrumb-item"><a href="index.html">Home</a>
+    </li>
+    <li class="breadcrumb-item active"> Employees</li>
+    </ul>
+    <h3>Create Employee</h3>
+    </div>
+    </div>
+
+<div class="card-body">
+<div class="row">
+<div class="col-xl-6 col-sm-12 col-12 ">
+<div class="form-group">
+<input type="text" placeholder="First Name" name="first_name" id="first_name"/>
+</div>
+</div>
+<div class="col-xl-6 col-sm-12 col-12 ">
+<div class="form-group">
+<input type="text" placeholder="Last Name" name="last_name" id="last_name" />
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-xl-6 col-sm-12 col-12 ">
+<div class="form-group">
+	<label>DOB</label><input type="date" placeholder="dob" name="dob" id="dob" />
+</div>
+</div>
+<div class="col-xl-6 col-sm-12 col-12 ">
+<div class="form-group">
+<input type="text" placeholder="Address" name="address"  id="address"/>
+</div>
+</div>
+</div>
+<div class="row">
+	<div class="col-xl-6 col-sm-12 col-12 ">
+	<div class="form-group">
+	<input type="text" placeholder="Phone Number" name="phno" id="phno" />
+	</div>
+	</div>
+	<div class="col-xl-6 col-sm-12 col-12 ">
+	<div class="form-group">
+	<input type="text" placeholder="Email Address" name="email" id="email"/>
+	</div>
+	</div>
+	</div>
+    <div class="row">
+        <div class="col-xl-6 col-sm-12 col-12 ">
+        <div class="form-group">
+            <input type="text" placeholder="Adhar Number" name="adhar_no" id="adhar_no" />
+        </div>
+        </div>
+        <div class="col-xl-6 col-sm-12 col-12 ">
+        <div class="form-group">
+        <input type="text" placeholder="Pan Number" name="pan_no" id="pan_no"/>
+        </div>
+        </div>
+        </div>
+        <div class="row">
+            <div class="col-xl-6 col-sm-12 col-12 ">
+            <div class="form-group">
+                <input type="submit" id="submit_action" class="btn btn-primary" value="Submit">
+
+            </div>
+            </div>
+            <div class="col-xl-6 col-sm-12 col-12 ">
+            <div class="form-group">
+            
+            </div>
+            </div>
+            </div>
+   
+
+</div>
+</div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  
+                
+                
+<script>
+    $(document).ready(function(){
+      $("#submit_action").click(function(){
+        event.preventDefault();	
+        var first_name = $('#first_name').val();
+        
+        var last_name = $('#last_name').val();
+        var dob = $('#dob').val();
+        var address = $('#address').val();
+
+        var phno = $('#phno').val();
+        var email = $('#email').val();
+        var adhar_no = $('#adhar_no').val();
+        var pan_no = $('#pan_no').val();
+		
+        var csrf_token = $('input[name=csrfmiddlewaretoken]').val();
+
+
+        
+        // console.log("category_name :", category_name);
+        // console.log("leadformat :", leadformat);
+
+
+        $.ajax({
+            url: "/ManagerApp/addemp",
+            type: "POST",
+		
+            data: {first_name :first_name ,
+             last_name: last_name,
+             dob:dob,
+             address:address,
+             phno:phno,
+             email:email,
+             adhar_no:adhar_no,
+             pan_no:pan_no,
+             csrfmiddlewaretoken: csrf_token }, // Corrected key names
+			success : function(result)
+                {
+                    console.log("result ***: ",result);
+                    alert("Employee Personal Details added");
+                    window.location.href = "/ManagerApp/employee_list";
+                },
+                error: function(error) {
+                    console.log("error ***: ", error);
+                    alert("Error adding Employee");
+                }
+        });
+    });
+});
+
+</script>
+
+
+{% endblock content %}

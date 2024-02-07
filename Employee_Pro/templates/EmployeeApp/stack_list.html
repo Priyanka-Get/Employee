@@ -1,0 +1,234 @@
+{% extends 'EmployeeApp/base.html' %}
+{% load static %}
+{% block content %}
+<style>
+  .page {
+    margin: 20px;
+    transform: translateY(100px);
+  }
+
+  .page-wrapper {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+  }
+
+  .content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+
+  h2 {
+    color: #555a64;
+    margin-top: 1px;
+    font-size: 27px;
+    font-weight: 700;
+  }
+
+  table {
+    width: 50%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    
+  
+  }
+
+  th, td {
+    padding: 1px;
+    text-align: left;
+    border-bottom: 1px solid #dee2e6;
+
+  }
+
+  th {
+    background-color:  rgb(26, 23, 59);
+    color: #fff;
+  }
+
+  tbody tr:hover {
+    background-color: #f5f5f5;
+  }
+  .modal-header h3{
+  text-align: center;
+ }
+ #editPlan{
+  color: white;
+ }
+ 
+</style>
+<div class="page">
+<div class="page-wrapper">
+  <div class="content container-fluid">
+    <center><h2 >Employee Stack List</h2></center>
+        
+    <table class="table table-striped">
+      <thead id="head">
+        <tr>
+          
+          <th>Product_id</th>
+          <th>E_Name</th>
+          <th>stack_date</th>
+          <th>stack_quantity</th>  
+          <th>stack_location</th>  
+          <th>stack_notes</th>  
+          <th>statck_Order_Id</th> 
+          <th>Action</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {% for p in object_list %}
+          <tr>
+           
+            <td>{{ p.product_id}}</td>
+            <td>{{ p.employee.first_name }} {{ attendance.employee.last_name }}</td>
+            <td>{{ p.stack_date}}</td>
+            <td>{{ p.stack_quantity}}</td>
+            <td>{{ p.stack_location}}</td>
+            <td>{{ p.stack_notes}}</td>
+           <td>{{ p.stack_order_id}}</td>
+         
+
+            <td>
+              <button class="btn btn-success" onClick="editEmployeeStack('{{p.stack_id}}')" >Edit</button>
+              <button class="btn btn-warning" id="editPlan" onclick="getEmployeeStack('{{p.stack_id}}')">View </button>
+              <button class="btn btn-danger" onClick="DeleteEmployee('{{p.stack_id}}')">Delete</button>
+               
+            </td>
+           
+          </tr>
+        {% endfor %} 
+      </tbody> 
+    </table>
+  </div>
+</div>
+</div>
+<!-- ----------------------popup form--------------------------------- -->
+<div class="modal" tabindex="-1" role="dialog" id="myHModal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content" style="width: 600px;margin-top: 70px;">
+      <div class="modal-header" style="border-bottom: 1px solid white;"><h4>Employee stack Details</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" style="margin-top: -25px;">
+ <table class="table table-hover">
+  <tbody>
+    <tr>
+      <td style="text-align: -webkit-right;">Employee Name</td>
+      <td>
+        <input type="text" class="form-control" placeholder="" id="name" name="tleads" readonly>
+      </td>
+    </tr>
+    <tr>
+      <td style="text-align: -webkit-right;">Stack Date</td>
+      <td>
+        <input type="text" class="form-control" placeholder="" id="stack_date" name="complt" readonly>
+      </td>
+    </tr>
+    <tr>
+      <td style="text-align: -webkit-right;">Product Id</td>
+      <td>
+        <input type="text" class="form-control" placeholder="" id="product_id" name="pend" readonly>
+      </td>
+   
+  </tr>
+  <td style="text-align: -webkit-right;">stack_quantity</td>
+  <td>
+    <input type="text" class="form-control" placeholder="" id="stack_quantity" name="pend" readonly>
+  </td>
+</tr>
+<td style="text-align: -webkit-right;">stack_location</td>
+<td>
+  <input type="text" class="form-control" placeholder="" id="stack_location" name="pend" readonly>
+</td>
+</tr>
+<td style="text-align: -webkit-right;">statck_Order_Id</td>
+<td>
+  <input type="text" class="form-control" placeholder="" id="stack_order_id" name="pend" readonly>
+</td>
+</tr>
+
+   
+    
+    
+   
+    </tbody>
+  </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" style="background-color:  rgb(26, 23, 59);">Close</button>
+      </div>
+    </div>
+
+
+<!-- ----------------------popup form--------------------------------- -->
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<!-- ... Your existing HTML code ... -->
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+function DeleteEmployee(stack_id){
+  var action = confirm("Are you sure you want to delete this Stack?");
+  if (action != false) {
+    $.ajax({
+        url: '{% url "Deletestack" %}',
+        data: {
+            'stack_id': stack_id,
+        },
+        dataType: 'json',
+        success: function (data) {
+            if (data.deleted) {
+              alert("Stack Deleted Successfully");
+              window.location.href = "/EmployeeApp/stack_list";
+              $("#userTable #i-" + stack_id).remove();
+            }
+        }
+
+    });
+
+}
+}
+function editEmployeeStack(stack_id) {
+  var action = confirm("Are you sure you want to edit this Stack?");
+  if (action !== false) {
+    
+    location.href = "/EmployeeApp/editEmployeeStack/" + stack_id; // Add a slash here
+  }
+};
+function getEmployeeStack(stack_id) {
+    $.ajax({
+        url: '{% url "get_emp_stack_details" %}',
+        data: {
+            'stack_id': stack_id,
+        },
+        dataType: 'json',
+        success: function (data) {
+            // Update the input fields in the modal with the received data
+            $('#name').val(data.first_name + ' ' + data.last_name);
+            $('#stack_date').val(data.stack_date);
+            $('#stack_quantity').val(data.stack_quantity);
+            $('#stack_location').val(data.stack_location);
+            $('#product_id').val(data.quantity_produced);
+            $('#stack_order_id').val(data.stack_order_id);
+            $('#product_id').val(data.product_id);
+            $('#myHModal').modal(data.show);
+
+
+
+        }
+    });
+}
+
+
+
+</script>
+
+{% endblock content %}

@@ -1,0 +1,196 @@
+{%extends 'EmployeeApp/base.html'%}
+{%block content%}
+{%load static%}
+
+<style>
+    /* Add styles for date input */
+    input[type="date"] {
+      padding: 20px;
+      border: 0.01px solid #ccc;
+      border-radius: 5px;
+      box-sizing: border-box;
+      width: 100%; /* Adjust the width as needed */
+    }
+    #top{
+        background-color:  rgb(26, 23, 59);
+        color: white;
+        margin-top: -15px;
+
+     
+    }
+    #top ul li{
+        color: white;
+        margin-top: -5px;
+    }
+    #top a{
+        color: white;
+        
+    }
+    #top h3{
+        color: white;
+    }
+    #submit_action{
+        padding: 10px;
+    }
+    .card .card-header {
+    padding: 0px 0px 0px;
+}
+.page-wrapper > .content {
+  margin-top: 100px;
+}
+#submit_action{
+    width: 150px;
+}
+  </style>
+<form id="employeeForm">
+   
+
+<div class="page-wrapper">
+<div class="content container-fluid">
+<div class="row">
+
+<div class="col-xl-12 col-sm-12 col-12 ">
+<div class="card">
+<div class="card-header">
+<div class="col-xl-12 col-sm-12 col-12 " id="topper">
+    <div class="breadcrumb-path mb-4" id="top">
+    <ul class="breadcrumb">
+    <li class="breadcrumb-item"><a href="index.html">Home</a>
+    </li>
+    <li class="breadcrumb-item active"> Employees</li>
+    </ul>
+    <h3>Create Employee</h3>
+    </div>
+    </div>
+<div class="card-body">
+<div class="row">
+<div class="col-xl-6 col-sm-12 col-12 ">
+<div class="form-group">
+<input type="text" placeholder="First Name" name="first_name" id="first_name" value="{{elist.0.first_name}}"/>
+<input type="hidden" placeholder="Emp_id" name="emp_id" id="emp_id" value="{{elist.0.emp_id}}"/>
+
+</div>
+</div>
+<div class="col-xl-6 col-sm-12 col-12 ">
+<div class="form-group">
+<input type="text" placeholder="Last Name" name="last_name" id="last_name" value="{{elist.0.last_name}}" />
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-xl-6 col-sm-12 col-12 ">
+<div class="form-group">
+	<label>DOB</label><input type="date" placeholder="dob" name="dob" id="dob" value="{% if elist.0.dob %}{{ elist.0.dob|date:'Y-m-d' }}{% endif %}" />
+</div>
+</div>
+<div class="col-xl-6 col-sm-12 col-12 ">
+<div class="form-group">
+<input type="text" placeholder="Address" name="address"  id="address" value="{{elist.0.address}}"/>
+</div>
+</div>
+</div>
+<div class="row">
+	<div class="col-xl-6 col-sm-12 col-12 ">
+	<div class="form-group">
+	<input type="text" placeholder="Phone Number" name="phno" id="phno" value="{{elist.0.phno}}" />
+	</div>
+	</div>
+	<div class="col-xl-6 col-sm-12 col-12 ">
+	<div class="form-group">
+	<input type="text" placeholder="Email Address" name="email" id="email" value="{{elist.0.email}}"/>
+	</div>
+	</div>
+	</div>
+    <div class="row">
+        <div class="col-xl-6 col-sm-12 col-12 ">
+        <div class="form-group">
+            <input type="text" placeholder="Adhar Number" name="adhar_no" id="adhar_no" value="{{elist.0.adhar_no}}"/>
+        </div>
+        </div>
+        <div class="col-xl-6 col-sm-12 col-12 ">
+        <div class="form-group">
+        <input type="text" placeholder="Pan Number" name="pan_no" id="pan_no" value="{{elist.0.pan_no}}"/>
+        </div>
+        </div>
+        </div>
+        <div class="row">
+            <div class="col-xl-6 col-sm-12 col-12 ">
+            <div class="form-group">
+                <input type="submit" id="submit_action" class="btn btn-primary" value="Submit">
+
+            </div>
+            </div>
+            <div class="col-xl-6 col-sm-12 col-12 ">
+            <div class="form-group">
+            
+            </div>
+            </div>
+            </div>
+   
+
+</div>
+</div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+      
+<script>
+
+
+
+
+  $(document).ready(function(){
+    $("#submit_action").click(function(event){
+     
+      event.preventDefault();
+        
+       emp_id = document.getElementById('emp_id').value; 
+      first_name=document.getElementById('first_name').value;
+      last_name=document.getElementById('last_name').value;
+      dob=document.getElementById('dob').value;
+      address=document.getElementById('address').value;    
+      email=document.getElementById('email').value;      
+      phno=document.getElementById('phno').value;   
+      adhar_no=document.getElementById('adhar_no').value;      
+      pan_no=document.getElementById('pan_no').value;      
+
+
+         
+
+      if(confirm("Are you sure you want to save this Employee?"))     
+      {
+        $.ajax({
+            url: "/EmployeeApp/Emp_updateEmployee",
+            type: "POST",
+            data: { 
+                 'emp_id':emp_id,
+                 'first_name': first_name,
+                 'last_name': last_name, 
+                 'dob':dob,
+                 'address':address, 
+                 'email':email,
+                 'phno':phno, 
+                 'adhar_no':adhar_no,
+                 'pan_no':pan_no},
+            success: function (result)
+             {
+              console.log("result val: ", result);
+                if (result['success']) {
+                    alert("Employee details edited successfully");
+                    window.location.href = "/EmployeeApp/Emp_employee_list";
+                } else {
+                    alert("Failed to edit employee details: " + result['message']);
+                }
+            },
+            error: function (xhr, status, error) {
+                console.log('AJAX error:', error);
+            }
+        });
+
+      }
+
+      });
+  });
+</script>
+
+
+{% endblock content %}
